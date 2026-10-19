@@ -1,0 +1,6 @@
+## Interface: 11200
+## Title: ShacklesAlert
+## Notes: Alerts for Shackles of the Legion boss emote and debuff
+## Version: 1.1
+## Author: ChatGPT
+ShacklesAlert.lua
