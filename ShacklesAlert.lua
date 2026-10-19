@@ -52,15 +52,17 @@ local function ShowWarning(text)
 end
 
 -- Scan player debuffs
+-- [Fix] The native UnitDebuff returns the icon texture first, not the name,
+-- so the old name comparison could never match. ClassicAPI's
+-- C_UnitAuras.GetAuraDataBySpellName looks the debuff up by name directly.
+local wasShackled = false
 local function CheckPlayerDebuffs()
-    for i = 1, 40 do
-        local name = UnitDebuff("player", i)
-        if not name then break end
-        if name == DEBUFF_NAME then
-            ShowWarning(WARNING_DEBUFF_TEXT)
-            break
-        end
+    if not (C_UnitAuras and C_UnitAuras.GetAuraDataBySpellName) then return end
+    local shackled = C_UnitAuras.GetAuraDataBySpellName("player", DEBUFF_NAME, "HARMFUL") ~= nil
+    if shackled and not wasShackled then
+        ShowWarning(WARNING_DEBUFF_TEXT)
     end
+    wasShackled = shackled
 end
 
 -- Event handler
